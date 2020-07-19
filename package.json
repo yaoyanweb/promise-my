@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/yaoyanweb/promise-my/issues"
   },
-  "homepage": "https://github.com/yaoyanweb/promise-my#readme"
+  "homepage": "https://github.com/yaoyanweb/promise-my#readme",
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  }
 }
