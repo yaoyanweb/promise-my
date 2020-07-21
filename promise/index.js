@@ -123,4 +123,4 @@ Promise.defer = Promise.deferred = function(){
     })
     return dfd;
 }
-// modules.exports = Promise;
+ module.exports = Promise;

@@ -1,4 +1,4 @@
-const PENGDING = 'PENGDING'; //等待
+const PENDING = 'PENDING'; //等待
 const RESOLVE = 'RESOLVE';  //成功
 const REJECTED = 'REJECTED'; // 失败
 
@@ -11,6 +11,7 @@ const resolvePromise = function (promise2, x, resolve, reject) {
 
     /*
         判断x的值和promise2是不是同一个 如果是同一个 就不要在等待了
+        此方法 为了兼容所有的promise,n个库中间 执行的流程是一样的
         直接出错即可
      */
 
@@ -20,7 +21,8 @@ const resolvePromise = function (promise2, x, resolve, reject) {
     /* 
 
     */
-    if (typeof x === 'object' && typeof x !== null || typeof x === 'function') {
+   
+    if ((typeof x === 'object' && typeof x != null) || typeof x === 'function') {
         let called; // 内部测试的时候  会成功和失败都调用 只调用一次
         try {
             /* 
@@ -35,7 +37,7 @@ const resolvePromise = function (promise2, x, resolve, reject) {
 
                 /* 
                     为什么要call？
-                    是为了保证不再次取then的值
+                    是为了保证不再次取then的 值
                     （同时promiseA+ 规范也是这么要求的）
                 */
                 then.call(x, y => {
@@ -90,15 +92,16 @@ class Promise {
     // 1.看这个属性 能否在原型上使用
     // 2. 看这个属性是否公用
     constructor(executor) {
-        this.status = 'PENGDING'; // 默认是pengding状态
+        this.status = PENDING; // 默认是pengding状态
         this.value = undefined; //成功的值
         this.reason = undefined; //失败的值
         this.onResolveCallbacks = []; // 成功事件队列
         this.onRejectedCallbacks = []; // 失败事件队列
         // 成功函数
         let resolve = (value) => {
+             
             // 屏蔽调用  只有等待状态才可以调用
-            if (this.status === PENGDING) {
+            if (this.status === PENDING) {
                 this.value = value;
                 this.status = RESOLVE;
                 // 此处是发布
@@ -108,7 +111,7 @@ class Promise {
         };
         // 失败函数
         let reject = (reason) => {
-            if (this.status === PENGDING) {
+            if (this.status === PENDING) {
                 this.reason = reason;
                 this.status = REJECTED;
                 // 此处是发布
@@ -127,7 +130,19 @@ class Promise {
 
     };
 
+    /* 
+        then 目前有两个参数 then方法就是异步的 
+    */
     then(onfulfilled, onrejected) {
+        /* 
+            onfulfilled，onrejected为可选参数 可以传空的 所以要判断下
+        */
+        onfulfilled = typeof onfulfilled === 'function' ? onfulfilled : value=>value;
+        
+        onrejected = typeof onrejected === 'function' ? onrejected : err=>{
+            throw err;
+        };
+
         let promise2 = new Promise((resolve, reject) => { //executor 自动执行 
             // 同步的情况
             if (this.status === RESOLVE) {
@@ -167,7 +182,7 @@ class Promise {
                 })
             }
             // 异步的情况
-            if (this.status === PENGDING) {
+            if (this.status === PENDING) {
                 // 如果是异步就先订阅好
                 // 此处是订阅
 
@@ -198,6 +213,15 @@ class Promise {
         return promise2;
 
     }
+}
+
+Promise.defer = Promise.deferred = function(){
+    let dfd = {};
+    dfd.promise = new Promise((resolve,reject)=>{
+        dfd.resolve = resolve;
+        dfd.reject = reject;
+    });
+    return dfd;
 }
 
 module.exports = Promise

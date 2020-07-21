@@ -31,12 +31,12 @@ then的原理
 // --------------------------
 
 // 2) 可选参数
-// const Promise = require('./promise/index2');
+const Promise = require('./promise/index2');
 
 let p = new Promise((resolve,reject)=>{
     resolve(2333)
 })
 
-p.then().then().then(data=>{
+p.then(data=>data,err=> {throw err}).then(data=>data,err=> {throw err} ).then(data=>{
     console.log(data);
 })
