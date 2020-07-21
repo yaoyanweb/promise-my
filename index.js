@@ -40,7 +40,7 @@ promise.then(data=>{
 // -----------------------------
 
 let fs = require('fs');
-// let Promise = require('./promise/index2')
+let Promise = require('./promise/index2')
 
 function read(url){
     return new Promise((resolve,reject)=>{

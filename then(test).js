@@ -5,22 +5,38 @@ then的原理
 3、如果不是promise 直接将结果传递下去即可
 */
 
-const Promise = require('./promise/index2');
+// const Promise = require('./promise/index2');
 
-const p = new Promise((resolve,reject)=>{
-    resolve(100)
+// const p = new Promise((resolve,reject)=>{
+//     resolve(100)
+// })
+
+// let p2 = p.then((data) =>{ 
+//   return new Promise((resolve,reject)=>{
+//     resolve(new Promise((resolve,reject)=>{
+//         resolve('100');
+//     }))
+//   })
+// });
+
+// p2.then(data=>{
+//     console.log(data,'1');
+// },err=>{
+//     console.log(err,'2');
+// })
+
+
+
+
+// --------------------------
+
+// 2) 可选参数
+// const Promise = require('./promise/index2');
+
+let p = new Promise((resolve,reject)=>{
+    resolve(2333)
 })
 
-let p2 = p.then((data) =>{ 
-    return data;
-    // throw new Error('我报错啦');
-})
-p2.then(data => {
-    console.log(data,'22')
-},err=>{
-    console.log(err,'11')
-}).then(data => {
-    console.log(data,'33')
-},err=>{
-    console.log(err,'44')
+p.then().then().then(data=>{
+    console.log(data);
 })
