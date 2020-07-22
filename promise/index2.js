@@ -21,9 +21,9 @@ const resolvePromise = function (promise2, x, resolve, reject) {
     /* 
 
     */
-   
-    if ((typeof x === 'object' && typeof x != null) || typeof x === 'function') {
-        let called; // 内部测试的时候  会成功和失败都调用 只调用一次
+   let called; // 内部测试的时候  会成功和失败都调用 只调用一次
+    if ((typeof x === 'object' &&  x != null) || typeof x === 'function') {
+       
         try {
             /* 
                取then 有可能会报错 有可能这个then属性 是通过defineProperty来定义

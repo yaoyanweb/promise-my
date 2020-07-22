@@ -37,6 +37,6 @@ let p = new Promise((resolve,reject)=>{
     resolve(2333)
 })
 
-p.then(data=>data,err=> {throw err}).then(data=>data,err=> {throw err} ).then(data=>{
+p.then().then().then(data=>{
     console.log(data);
 })
