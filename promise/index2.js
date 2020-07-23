@@ -87,6 +87,22 @@ const resolvePromise = function (promise2, x, resolve, reject) {
         resolve(x);
     }
 }
+/* 
+    判断是不是一个promsie
+*/
+const isPromise = (value) =>{
+    /* 
+        首先判断是不是对象或者函数
+    */
+    if((typeof value === 'object' && value !== null) || typeof value === 'function'){
+        /* 
+            再判断是否含有then方法 
+        */
+        return typeof value.then === 'function';
+    }else {
+        return false;
+    }
+}
 
 class Promise {
     // 1.看这个属性 能否在原型上使用
@@ -212,6 +228,65 @@ class Promise {
         });
         return promise2;
 
+    }
+    /* 
+        finally 最终的
+    */
+    finally(cb){
+        return this.then(data=>{
+            /* 
+                有可能finally 里面return了一个promise 所以需要用
+                resolve  promise.resolve可以等待那个promise执行完成后再执行
+            */
+            return Promise.resolve(cb()).then(()=>data);
+        },err => {
+            return Promise.resolve(cb()).then(()=>{throw err});
+        })
+    }
+    
+    static all(values){
+        /* 
+            promsie all 返回的 是一个promise 所以
+            这一步 应该不需要解释吧
+        */
+        return new Promise((resolve,reject)=>{
+           
+            /* 
+                用来存放结果
+            */
+            let arr = [];
+            /* 
+                判断是否执行完 标记用的
+            */
+            let index = 0;
+             /* 
+                此方法用来判断 数组里面所有的 promise或者普通值 是否全部执行完成
+            */
+            function processData(key,value){
+                /* 
+                    这样赋值 而不是用push 是为了保持原来的顺序
+                */
+                arr[key] = value;
+                index++;
+                if(values.length === index){
+                    resolve(arr);
+                }
+            }
+            for(let i = 0;i < values.length; i++){
+                let current = values[i];
+                /* 
+                    如果是promise 就调用then方法
+                */
+                if(isPromise(current)){
+                     current.then(data=>{
+                        processData(i,data);
+                    },reject);
+                }else {
+                    processData(i,current)
+                }
+            }
+        })
+    
     }
 }
 
