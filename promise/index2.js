@@ -313,7 +313,7 @@ class Promise {
 
     static resolve(param){
         if(param instanceof Promise){
-            return promise
+            return param
         };
         return new Promise((resolve,reject)=>{
             if(isPromise(param)){
