@@ -4,7 +4,7 @@
   "description": "promise-my",
   "main": "index.js",
   "scripts": {
-    "test": "promises-aplus-tests promise/index2"
+    "test": "promises-aplus-tests promise/index"
   },
   "repository": {
     "type": "git",

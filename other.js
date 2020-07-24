@@ -2,7 +2,7 @@
     promise all 全部 可以实现等待所以的异步执行完后 拿到统一结果
     解决异步并发 同步处理结果
 */
-const Promise = require('./promise/index2');
+// const Promise = require('./promise/index2');
 
 const fs = require('fs');
 
@@ -27,7 +27,7 @@ function read(url) {
 
 
 
-Promise.all([1,2,3,read('./name.txt'),read('./age.txt'),5,6]).then(data=>{
+Promise.race([read('./name.txt'),read('./age.txt')]).then(data=>{
     console.log(data);
 })
 
@@ -38,8 +38,8 @@ Promise.all([1,2,3,read('./name.txt'),read('./age.txt'),5,6]).then(data=>{
 
 
 
-read('./name.txt').finally(data=>{
-    console.log(data,'finally')
-}).then(data=>{
-    console.log(data,'then')
-})
+// read('./name.txt').finally(data=>{
+//     console.log(data,'finally')
+// }).then(data=>{
+//     console.log(data,'then')
+// })

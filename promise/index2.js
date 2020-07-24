@@ -229,6 +229,9 @@ class Promise {
         return promise2;
 
     }
+    catch(){
+        return this.then(null,onrejected);
+    }
     /* 
         finally 最终的
     */
@@ -287,6 +290,46 @@ class Promise {
             }
         })
     
+    }
+
+    static race(promises){
+        return new Promise((resolve,reject)=>{
+            if(promise.length === 0){
+                return;
+            }else {
+                for(let i = 0;i<promises.length;i++){
+                    Promise.resolve(promises[i]).then(data=>{
+                        resolve(data);
+                        return;
+                    },err=>{
+                        reject(err);
+                        return;
+                    })
+                }
+            }
+        })
+    }   
+
+
+    static resolve(param){
+        if(param instanceof Promise){
+            return promise
+        };
+        return new Promise((resolve,reject)=>{
+            if(isPromise(param)){
+                setTimeout(()=>{
+                    param.then(resolve,reject);
+                })
+            }else {
+                resolve(param)
+            }
+        })
+    }
+
+    static reject(reason){
+        return new Promise((resolve,reject)=>{
+            reject(reason)
+        })
     }
 }
 
