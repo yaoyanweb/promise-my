@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/yaoyanweb/promise-my#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "promises-aplus-tests": "^2.1.2",
     "request": "^2.88.2"
   }
